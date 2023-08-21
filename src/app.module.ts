@@ -23,9 +23,11 @@ import { GenreModule } from './genre/genre.module';
     GenreModule,
     FileModule,
 
-    MongooseModule.forRoot(
-      'mongodb+srv://mtalhasaleem22:NoMyWl1GdLrzeJ9j@database.1u29mq1.mongodb.net/?retryWrites=true&w=majority',
-    ),
+    MongooseModule.forRootAsync({
+      useFactory: () => ({
+        uri: 'mongodb+srv://mtalhasaleem22:NoMyWl1GdLrzeJ9j@database.1u29mq1.mongodb.net/test?retryWrites=true&w=majority',
+      }),
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

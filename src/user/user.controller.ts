@@ -19,12 +19,14 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 // import { json } from 'stream/consumers';
+import { Public } from '../authentication/decorator';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   // POST /users/login - Login a user
+  @Public()
   @Post('login')
   async login(
     @Body('email') email: string,
@@ -55,6 +57,7 @@ export class UserController {
     }
   }
   // POST /users/registration - Register a new user
+  @Public()
   @Post('registration')
   create(@Body() createUserDto: CreateUserDto) {
     try {
@@ -65,9 +68,11 @@ export class UserController {
   }
 
   // GET /users - Get all users
+  @Public()
   @Get()
-  findAll(@Query() query: any) {
+  findAll(@Query() query: any, @Headers() head: any) {
     try {
+      console.log(head);
       console.log(query);
       return this.userService.findAll(query);
     } catch (err) {

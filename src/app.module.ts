@@ -12,6 +12,9 @@ import { SeriesModule } from './series/series.module';
 import { FileModule } from './file/file.module';
 import { GenreSeriesModule } from './genre-series/genre-series.module';
 import { GenreModule } from './genre/genre.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './authentication/guard';
+import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     UserModule,
@@ -22,6 +25,11 @@ import { GenreModule } from './genre/genre.module';
     GenreSeriesModule,
     GenreModule,
     FileModule,
+    JwtModule.register({
+      global: true,
+      secret: 'secret',
+      signOptions: { expiresIn: '60s' },
+    }),
 
     MongooseModule.forRootAsync({
       useFactory: () => ({
@@ -30,6 +38,12 @@ import { GenreModule } from './genre/genre.module';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}
